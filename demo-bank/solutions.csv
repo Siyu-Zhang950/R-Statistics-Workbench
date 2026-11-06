@@ -1,0 +1,6 @@
+"id","text","source_pdf","source_pages","provenance"
+"DEMO-01","Subtract the probability of 0, 1, or 2 late orders from 1. The result is approximately 0.110870.","demo-bank/solutions.csv","DEMO-01","Worked demo example"
+"DEMO-02","The mean is 11 minutes. The sum of squared deviations is 28, so the sample variance is 7 square minutes.","demo-bank/solutions.csv","DEMO-02","Worked demo example"
+"DEMO-03","Sum the probability of 0, 1, and 2 requests. The result is 13 times exp(-4), approximately 0.238103.","demo-bank/solutions.csv","DEMO-03","Worked demo example"
+"DEMO-04","Standardize 520 to z=2 and evaluate the upper tail, approximately 0.022750.","demo-bank/solutions.csv","DEMO-04","Worked demo example"
+"DEMO-05","Divide 0.02 times 0.80 by the overall flag probability of 0.065. The result is approximately 0.246154.","demo-bank/solutions.csv","DEMO-05","Worked demo example"
