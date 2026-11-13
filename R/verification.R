@@ -13,7 +13,7 @@ exam_check_inputs <- function(p = NULL, variance = NULL, sd = NULL,
         "[0-9]+(?:\\.[0-9]+)?\\s*%", question, perl = TRUE))[[1]]
       expected <- as.numeric(gsub("[% ]", "", pct)) / 100
       if (length(p) == 1 && length(expected) == 1 &&
-          !grepl('at least|at most|more than|less than|至少|至多|超过|低于', question, ignore.case=TRUE) &&
+          !grepl('at least|at most|more than|less than', question, ignore.case=TRUE) &&
           abs(p - expected) > 1e-10) {
         stop("Percentage mismatch: question says ", pct,
              " => probability ", expected, "; supplied p=", p,

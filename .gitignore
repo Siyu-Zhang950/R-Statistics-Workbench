@@ -51,3 +51,6 @@ rsconnect/
 .Rprofile
 private-bank/
 *.rds
+
+# Local calculation history
+/history/

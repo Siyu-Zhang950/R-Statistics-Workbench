@@ -1,0 +1,40 @@
+id,name_en,clues,formula,r_commands,traps,focus
+COMB,"Permutations, variations and combinations","8::how many (?:ways|different|combinations)|handshakes|shakes hands|arrangements|different numbers can be written
+7::\btop\s+[0-9]+|\bchoose\b
+6::without replacement|without repetition|do not (?:put|return)|set that .{0,12}aside
+3::with replacement|with repetition|put .{0,16}back
+3::order matters|ordering|rank them","n!; n!/prod(g!); n!/(n-k)!; n^k; choose(n,k); choose(n+k-1,k)","exam_comb(n,k,kind='comb'); factorial(n); choose(n,k)","Check order, repetition and replacement.",order and replacement
+BINOM_THEOREM,Binomial theorem and nonnegative integer solutions,4::a\s*\+\s*b\s*\+\s*c\s*=,"(a+b)^n=sum(choose(n,k)*a^(n-k)*b^k); solutions=choose(m+r-1,r-1)","choose(n,k); choose(m+r-1,r-1)",Check the exponent and whether zero is allowed.,exponents and integer constraints
+PROB_OPS,Event operations and classical probability,"8::\bdie\b|\bdice\b|\brolled\b|rolling|probability of getting
+4::∪|∩|union|intersection",P(A union B)=P(A)+P(B)-P(A intersect B); P(A)=favourable/total; P(A intersect B)=P(A|B)*P(B),"union(A,B); intersect(A,B); length(A)/length(S)",Subtract overlap when using the union rule.,overlap between events
+CONDITIONAL,Conditional probability and independence,"12::P\s*\(\s*[A-Za-z][A-Za-z0-9_ {}<>=!+.,-]{0,40}\|\s*[A-Za-z][A-Za-z0-9_ {}<>=!+.,-]{0,40}\)",P(A|B)=P(A intersect B)/P(B); independent: P(A intersect B)=P(A)*P(B),P_AB/P_B; P_A*P_B,Check which event is conditioned on.,the conditioning event
+BAYES,Total probability and Bayes rule,"12::(?:test(?:s|ing)?|screen(?:ing)?).{0,32}(?:positive|negative)|(?:positive|negative).{0,16}(?:test|result)
+10::(?:chosen|selected).{0,40}(?:at random|randomly).*probability.{0,160}(?:chosen|selected)
+10::(?:choose|chosen|selected).{0,50}(?:at random|randomly).*(?:result|observ|find|giving).*(?:probability|which).{0,200}(?:using|used|chosen|selected)
+5::actually\s+(?:has|have)",P(B)=sum(P(B|A_i)*P(A_i)); P(A|B)=P(B|A)*P(A)/P(B),"exam_test(prior,sens,fpr)",Use the total probability in the denominator.,prior and likelihood
+DISCRETE_RV,"Discrete expectation, variance and linear transforms","10::P\s*\(\s*X\s*=\s*[0-9]+\s*\).{0,50}P\s*\(\s*X\s*=
+8::long.term average|probability.{0,35}(?:zero|one|two)|frequency distribution
+6::Y\s*=\s*(?:a|[0-9]+)\s*\+\s*(?:b|[0-9]+)\s*X",E[X]=sum(x*p); Var(X)=sum((x-E[X])^2*p); Var(a+bX)=b^2*Var(X); E(a+bX)=a+bE(X),"exam_mean_var(x,p); sum(x*p); sum((x-sum(x*p))^2*p)",The probabilities must sum to one.,the probability mass function
+CONTINUOUS_RV,Continuous density and cumulative distribution,,"P(a<X<b)=F(b)-F(a); F(x)=integral(-Inf,x,f(t)dt); f>=0, integral(f)=1","integrate(f,a,b); integrate(f,-Inf,x)",A single point has probability zero.,density and support
+CHEBYSHEV,Chebyshev inequality,"7::at least[\w ]{0,24}(?:variance|standard deviation)|percentage beyond
+5::bound[\w ]{0,20}probability|probability bound","P(|X-mu|>=a)<=sigma^2/a^2; P(|X-mu|<k*sigma)>=1-1/k^2; a>0, k>0",1-1/k^2; sigma^2/a^2,Check whether the question asks for a bound.,a bound using the variance
+BIVARIATE,"Joint, marginal, conditional, covariance and correlation","8::f\s*\(\s*x\s*,\s*y\s*\)|two.{0,20}random variables","sum(p_xy)=1 or double_integral(f)=1; marginal=sum/integral over other variable; f(x|y)=f(x,y)/f_Y(y); Cov=E(XY)-E(X)*E(Y); rho=Cov/(sdX*sdY)","cov(x,y); cor(x,y); integrate(f,a,b); sum(x*y*p)",Integrate or sum over the other variable to get a marginal.,joint and marginal distributions
+UNIFORM,Discrete and continuous uniform distributions,"10::\bU\s*\(
+3::between.{0,30}inclusive","Continuous U[a,b]: f=1/(b-a), Var=(b-a)^2/12; discrete U{a,...,b}: m=b-a+1, p=1/m, Var=(m^2-1)/12; both E=(a+b)/2","runif(n,a,b); punif(x,a,b); 1/m",Check whether the support is discrete or continuous.,the support of the distribution
+BINOMIAL,Binomial distribution,"10::(?:guesses|guessing|guessed).{0,80}(?:every|each|independent)
+10::(?:each|every).{0,75}(?:exactly one correct|one correct option|success probability)
+10::(?=.*(?:out of every|per\s+[0-9]+))(?=.*(?:randomly selected|selected at random)).*(?:randomly selected|selected at random)
+12::rolled.{0,25}times|each roll|each trial|fixed number of trials|independent trials
+8::(?:exactly|at least|at most)\s+(?:[0-9]+|one|two|three|half).{0,50}(?:of|out of)\s+(?:[0-9]+|four|five|six|n)\b
+3::with replacement|n\s*=
+0::\bindependently\b","P(X=k)=choose(n,k)*p^k*(1-p)^(n-k); E=np; Var=np*(1-p)","dbinom(k,n,p); pbinom(k,n,p); exam_binom(n,p,k,type)","Check fixed n, independence, and the same p.",fixed independent trials
+POISSON,Poisson distribution,"6::per.{0,15}(?:minute|hour|day|week)|every half.hour|reporting rate
+10::(?=.*(?:out of every|per\s+[0-9]+))(?=.*(?:randomly selected|selected at random)).*(?:randomly selected|selected at random)
+3::expected number|lambda|λ",P(X=k)=exp(-lambda)*lambda^k/k!; E=Var=lambda; approx lambda=n*p,"dpois(k,lambda); ppois(k,lambda); exam_pois(lambda,k,type)",Use a rate for the same interval as the count.,the count interval
+EXPONENTIAL,Exponential distribution and memorylessness,"5::no event|rate.{0,15}per week
+3::lambda|λ",P(X>t)=exp(-rate*t); E=1/rate; P(X>s+t|X>s)=P(X>t),"pexp(t,rate); exam_exp(rate,t,type); exam_exp_cond(rate,s,t)",Rate is the reciprocal of the mean waiting time.,waiting times
+NORMAL,Normal distribution and standardization,"10::\bN\s*\(
+3::standard deviation|sigma|σ",z=(x-mu)/sigma; P(a<X<b)=Phi(z_b)-Phi(z_a),"pnorm(b,mu,sd)-pnorm(a,mu,sd); exam_norm(mu,sd,a,b)",Use the standard deviation when standardizing.,mean and standard deviation
+CLT,Central limit theorem and approximations,"8::total time (?:of|to|for)|sum of.*variables|sample mean
+8::repeat the above|histogram of these|generate N1|N1\s*=|sqrt\s*\(\s*n","Z=(sum(X)-n*mu)/(sigma*sqrt(n)) ~ N(0,1); sd(Xbar)=sigma/sqrt(n); Bin approx N(np,np*(1-p)); Pois approx N(lambda,lambda)","pnorm(); exam_norm(n*mu,sqrt(n)*sigma,a,b)",Use the standard error of the mean for sample averages.,the sample mean or sum
+DESCRIPTIVE,Descriptive statistics,2::mean|variance,xbar=sum(x)/n; g=exp(mean(log(x))); s^2=sum((x-xbar)^2)/(n-1); z=(x-xbar)/s,mean(x); var(x); quantile(x); exp(mean(log(x))); scale(x),Check the variance denominator and quantile convention.,the summary and its convention

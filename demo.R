@@ -17,3 +17,6 @@ print(exam_search(query, top_k = 3))
 exam_question("DEMO-01")
 exam_solution("DEMO-01")
 
+
+# Natural notation for an exact binomial probability.
+exam_calc("C(10,3)*0.4^3*0.6^7", digits = 4)

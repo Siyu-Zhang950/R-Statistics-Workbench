@@ -1,84 +1,82 @@
-# R Statistics Workbench
+# R Statistics Workbench v1.2
 
-An offline, base R toolkit for working through probability and descriptive statistics. Results show the model conditions, formula, calculation steps, and, where implemented, a numerical cross-check.
+An offline, base R workbench for probability calculations, descriptive statistics,
+and finding references in a local question bank. The public edition comes with
+five fictional questions and worked solutions.
 
-## Example run
-
-| Task | Example result |
+| Task | Example |
 | --- | --- |
-| Calculate the chance of at least 3 late orders out of 12 at a 10% late rate | **0.110870**, with the model assumptions and calculation shown |
-| Search the same question with 20 orders | **DEMO-01**, similarity **0.97**, labeled `changed numbers` |
-| Look up `DEMO-01` | The question text, its location in the demo bank, and a worked solution |
-
-The workflow is to find a reference, inspect the model and inputs, and calculate using the current question's parameters.
+| Calculate an exact binomial probability | `exam_calc("C(10,3)*0.4^3*0.6^7")` shows **0.2150** to four decimal places |
+| Find a related worked question | Changing the demo's 12 orders to 20 finds `DEMO-01` with the label `changed numbers` |
+| Review the model and inputs | `exam_detail(1)` shows the question and highlights numerical and textual differences |
 
 ## Quick start
 
-Install R and open a terminal in this folder. Run:
-
-```sh
-Rscript demo.R
-Rscript check.R
-```
-
-Or run the following in an R console with this folder as the working directory:
+Install R, open this folder in R or RStudio, and run:
 
 ```r
 source("workbench.R")
+exam_menu()
+```
 
-# At least 3 late orders out of 12, assuming independent 10% late probabilities.
+From a terminal in this folder, run `Rscript demo.R` for a walkthrough or
+`Rscript check.R` for the regression checks. The workbench uses the packages
+that ship with R.
+
+## Calculate
+
+```r
+exam_calc("C(10,3)*0.4^3*0.6^7")
+exam_calc("integral(integral(2,y,0,x),x,0,1)")
+exam_calc("invPhi(0.95)")
+
 result <- exam_prob("binomial", "ge", q = 3, n = 12, p = 0.10)
 print(result)
-result$value
-# Approximately 0.110870
 ```
 
-The example uses fictional order data. The project runs offline with the packages that ship with R. Verified on R 4.6.1 on Windows.
+The calculator shows the translated R expression and the result. Run
+`exam_calc()` for interactive variables, `ans`, and local history.
+The [calculator rules](guide/calculator-rules.md) list supported syntax and
+arguments. The structured solvers include `exam_prob()`, `exam_bayes()`,
+`exam_test()`, `exam_describe()`, `exam_quantile()`, and `exam_clt()`.
 
-## What you can calculate
-
-| Task | Examples of functions |
-| --- | --- |
-| Probabilities and event endpoints | `exam_prob()`, `exam_multinomial()` |
-| Conditional probabilities | `exam_bayes()`, `exam_test()` |
-| Descriptive statistics | `exam_describe()`, `exam_quantile()`, `exam_frequency()` |
-| Empirical distributions and density estimates | `exam_ecdf()`, `exam_kde()` |
-| Moments and normal approximations | `exam_discrete()`, `exam_continuous()`, `exam_clt()` |
-
-`R/core.R` implements the calculations. `R/verification.R` adds input checks and alternative calculations for selected results. `R/numeric-output.R` handles display precision and normal-tail underflow.
-
-## Search the question bank
+## Search and inspect
 
 ```r
-source("workbench.R")
-
 query <- paste(
   "A warehouse receives 20 independent orders.",
   "Each order has a 10% chance of arriving late.",
   "Under a binomial model, what is the probability that at least 3 orders arrive late?"
 )
-exam_search(query, top_k = 3)
-exam_question("DEMO-01")
-exam_solution("DEMO-01")
+exam_find(query, top_n = 3)
+exam_detail(1)
+exam_topic()
+exam_answer(1)
 ```
 
-The top result is `DEMO-01` with a score of 0.97 and the label `changed numbers`. The result points to the matching record in `demo-bank/questions.csv` and shows that the order count changed from 12 to 20. Search combines text overlap, character trigrams, and topic keywords. Its scores rank references and do not measure the probability of a correct answer. Calculation still requires the model and parameters for the current question.
+`exam_go()` accepts pasted text. Enter `:end` on its own line to search.
+Search combines TF-IDF cosine and weighted term containment. The workbench
+also compares question structure, number order, and repeated numbers before
+assigning a label. Scores rank references. Inspect the question and choose the
+model before calculating.
 
-### Load a personal question bank locally
+Existing scripts can still call `exam_search(query, top_k = 3)`,
+`exam_question("DEMO-01")`, and `exam_solution("DEMO-01")`. Search scores
+and labels reflect the v1.2 engine.
 
-Call `exam_bank_load("path/to/your/data")` with the folder that contains both `questions.rds` and `solutions.rds`, or both `questions.csv` and `solutions.csv`. Existing R Statistics Exam Solver v0.3.0 tables use the supported schema. For a new bank, copy the column headers from the demo tables and use the same ID in both files to link a question to its solution. The location fields hold the source filename and page or record ID. To restore the demo bank, call `exam_bank_load()`.
+## Use a personal bank
 
-On Windows, if R cannot read a folder with non-ASCII characters, start R with a UTF-8 locale or use a local folder whose path contains only ASCII characters.
+Keep your files outside the repository or in the ignored `private-bank/` folder.
+Call `exam_bank_load("path/to/your/bank")` with a folder containing
+`questions.csv` and `solutions.csv`, or the equivalent RDS pair. Use the
+[demo headers](demo-bank/questions.csv) and share IDs between the two tables.
+Call `exam_bank_load()` to restore the fictional bank.
 
-Keep personal question banks outside the repository. The repository ignores `private-bank/` and local RDS files.
+Optional `question_pdf` and `answer_pdf` columns hold paths relative to the
+loaded bank folder. Add standalone local PDFs to `private-bank/materials/`
+to open them through menu option 5. See the [workbench guide](guide/workbench.md)
+for commands.
 
-
-## Assumptions and limits
-
-Choose the statistical model and event before running a calculation. Cross-checks test the arithmetic under those inputs. Quantiles use R's type 2 convention. The descriptive summary reports both variance denominators, `n` and `n - 1`. Numerical integration and normal approximations can introduce error.
-
-This portfolio edition extracts the reusable calculation code from a personal offline study tool. It contains self-contained examples and excludes the original course question bank, course documents, and study records.
-
----
-
-中文速用说明：把 R 的工作目录设为此文件夹，运行 `source("demo.R")` 查看虚构的订单延迟案例，运行 `source("check.R")` 检查示例结果。日常调用可先运行 `source("workbench.R")`。
+The public edition contains the workbench, fictional examples, and English
+documentation. Course PDFs, private question banks, and local history are
+kept in the personal edition.
